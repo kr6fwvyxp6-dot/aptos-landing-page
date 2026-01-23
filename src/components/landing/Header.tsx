@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,32 +43,59 @@ const Header = () => {
         </a>
 
         {/* Navigation Links */}
-        <ul className="flex items-center gap-8 md:gap-12">
-          <li>
+        <div className="flex items-center gap-6 md:gap-10">
+          <ul className="flex items-center gap-6 md:gap-10">
+            <li>
+              <button
+                onClick={() => scrollToSection('about')}
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
+              >
+                {t('nav.about')}
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => scrollToSection('booking')}
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
+              >
+                {t('nav.book')}
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => scrollToSection('contact')}
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
+              >
+                {t('nav.contact')}
+              </button>
+            </li>
+          </ul>
+
+          {/* Language Switcher */}
+          <div className="flex items-center gap-1 ml-4 border-l border-border pl-4">
             <button
-              onClick={() => scrollToSection('about')}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
+              onClick={() => setLanguage('en')}
+              className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
+                language === 'en'
+                  ? 'text-foreground bg-secondary'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
-              About
+              EN
             </button>
-          </li>
-          <li>
+            <span className="text-muted-foreground/50">/</span>
             <button
-              onClick={() => scrollToSection('booking')}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
+              onClick={() => setLanguage('fi')}
+              className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
+                language === 'fi'
+                  ? 'text-foreground bg-secondary'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
-              Book
+              FI
             </button>
-          </li>
-          <li>
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
-            >
-              Contact
-            </button>
-          </li>
-        </ul>
+          </div>
+        </div>
       </nav>
     </header>
   );
