@@ -1,4 +1,4 @@
-name: Deploy Vite Site
+name: Build and Deploy
 on:
   push:
     branches: ["main"]
@@ -15,23 +15,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-
       - name: Install dependencies
         run: npm install
-
-      - name: Build project
+      - name: Build
         run: npm run build
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist' # This is where the build step puts the files
+          path: './dist' # This is the crucial change
 
   deploy:
     needs: build
