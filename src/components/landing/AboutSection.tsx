@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -23,16 +25,16 @@ const AboutSection = () => {
 
   const features = [
     {
-      title: 'Personalized Guidance',
-      description: 'One-on-one strategy sessions tailored to your unique investment goals and risk profile.',
+      title: t('about.feature1.title'),
+      description: t('about.feature1.description'),
     },
     {
-      title: 'Market Insights',
-      description: 'Access to exclusive market analysis and emerging opportunities before they hit the mainstream.',
+      title: t('about.feature2.title'),
+      description: t('about.feature2.description'),
     },
     {
-      title: 'Portfolio Growth',
-      description: 'Proven frameworks to scale your apartment portfolio with confidence and clarity.',
+      title: t('about.feature3.title'),
+      description: t('about.feature3.description'),
     },
   ];
 
@@ -48,24 +50,24 @@ const AboutSection = () => {
           <div className={`section-fade ${isVisible ? 'visible' : ''}`}>
             {/* Section Label */}
             <span className="text-sm font-medium tracking-widest uppercase text-muted-foreground mb-4 block">
-              The Approach
+              {t('about.label')}
             </span>
 
             {/* Heading */}
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-foreground mb-6">
-              The Aptos Approach
+              {t('about.headline')}
             </h2>
 
             {/* Description */}
             <p className="text-lg text-muted-foreground leading-relaxed mb-10">
-              At Aptos Apartments, we help emerging investors navigate the multifamily real estate market through personalized guidance and access to exclusive opportunities. Our approach combines deep market expertise with a commitment to your individual success.
+              {t('about.description')}
             </p>
 
             {/* Feature Cards */}
             <div className="space-y-6">
               {features.map((feature, index) => (
                 <div
-                  key={feature.title}
+                  key={index}
                   className={`group p-6 bg-background border border-border/50 transition-all duration-300 hover:border-border hover:shadow-sm section-fade ${isVisible ? 'visible' : ''}`}
                   style={{ transitionDelay: `${(index + 1) * 150}ms` }}
                 >

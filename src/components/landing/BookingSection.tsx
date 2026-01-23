@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const BookingSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,17 +33,17 @@ const BookingSection = () => {
         <div className={`max-w-4xl mx-auto text-center section-fade ${isVisible ? 'visible' : ''}`}>
           {/* Section Label */}
           <span className="text-sm font-medium tracking-widest uppercase text-muted-foreground mb-4 block">
-            Get Started
+            {t('booking.label')}
           </span>
 
           {/* Heading */}
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-foreground mb-6">
-            Schedule Your Session
+            {t('booking.headline')}
           </h2>
 
           {/* Description */}
           <p className="text-lg text-muted-foreground leading-relaxed mb-12 max-w-2xl mx-auto">
-            Take the first step toward mastering apartment investing. Book your complimentary strategy session and discover how to build a portfolio that aligns with your goals.
+            {t('booking.description')}
           </p>
         </div>
 
@@ -101,11 +103,11 @@ const BookingSection = () => {
                 </div>
                 
                 <h3 className="font-serif text-xl md:text-2xl font-medium text-foreground mb-3">
-                  Booking Widget
+                  {t('booking.widget.title')}
                 </h3>
                 
                 <p className="text-muted-foreground max-w-md">
-                  Your SimplyBook.me calendar will appear here. See the code comments for integration instructions.
+                  {t('booking.widget.description')}
                 </p>
                 
                 {/* Visual separator */}

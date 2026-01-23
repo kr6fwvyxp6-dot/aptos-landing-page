@@ -1,6 +1,9 @@
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const HeroSection = () => {
+  const { t } = useLanguage();
+
   const scrollToBooking = () => {
     const element = document.getElementById('booking');
     if (element) {
@@ -33,9 +36,7 @@ const HeroSection = () => {
             className="font-serif text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-medium leading-tight tracking-tight text-foreground mb-6 md:mb-8 opacity-0 animate-fade-in"
             style={{ animationDelay: '0.2s' }}
           >
-            Master Your Path to
-            <br />
-            Apartment Investing
+            {t('hero.headline')}
           </h1>
 
           {/* Subheadline */}
@@ -43,7 +44,7 @@ const HeroSection = () => {
             className="text-lg md:text-xl lg:text-2xl text-muted-foreground font-light leading-relaxed max-w-2xl mx-auto mb-10 md:mb-14 opacity-0 animate-fade-in"
             style={{ animationDelay: '0.5s' }}
           >
-            Book a complimentary sparring session to refine your strategy and gain the confidence to grow your portfolio.
+            {t('hero.subheadline')}
           </p>
 
           {/* CTA Button */}
@@ -56,7 +57,7 @@ const HeroSection = () => {
               size="lg"
               className="btn-premium bg-primary text-primary-foreground hover:bg-primary/90 px-10 py-6 text-base font-medium tracking-wide"
             >
-              Book Your Session
+              {t('hero.cta')}
             </Button>
           </div>
         </div>

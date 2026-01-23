@@ -1,5 +1,8 @@
+import { useLanguage } from '@/contexts/LanguageContext';
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
 
   return (
     <footer id="contact" className="py-20 md:py-28 bg-secondary/30">
@@ -8,12 +11,12 @@ const Footer = () => {
         <div className="max-w-4xl mx-auto">
           {/* Section Label */}
           <span className="text-sm font-medium tracking-widest uppercase text-muted-foreground mb-4 block text-center">
-            Contact
+            {t('footer.label')}
           </span>
 
           {/* Heading */}
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-foreground mb-10 text-center">
-            Get in Touch
+            {t('footer.headline')}
           </h2>
 
           {/* Contact Info */}
@@ -68,7 +71,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-muted-foreground">
             {/* Copyright */}
             <p>
-              © {currentYear} Aptos Apartments. All rights reserved.
+              © {currentYear} {t('footer.copyright')}
             </p>
 
             {/* Logo */}
