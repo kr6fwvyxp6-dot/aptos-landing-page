@@ -23,7 +23,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 mb-16">
             {/* Email */}
             <a
-              href="mailto:hello@aptosapartments.com"
+              href="mailto:aptos@aptos.fi"
               className="group flex items-center gap-3 text-lg text-muted-foreground hover:text-foreground transition-colors"
             >
               <svg
@@ -39,12 +39,12 @@ const Footer = () => {
                   d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                 />
               </svg>
-              <span className="link-underline pb-0.5">hello@aptosapartments.com</span>
+              <span className="link-underline pb-0.5">aptos@aptos.fi</span>
             </a>
 
             {/* Phone */}
             <a
-              href="tel:+1234567890"
+              href="tel:+358452336929"
               className="group flex items-center gap-3 text-lg text-muted-foreground hover:text-foreground transition-colors"
             >
               <svg
