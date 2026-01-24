@@ -45,7 +45,7 @@ const AboutSection = () => {
       className="py-24 md:py-32 lg:py-40 bg-secondary/30"
     >
       <div className="container mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div className="max-w-3xl mx-auto">
           {/* Text Content */}
           <div className={`section-fade ${isVisible ? 'visible' : ''}`}>
             {/* Section Label */}
@@ -82,27 +82,6 @@ const AboutSection = () => {
             </div>
           </div>
 
-          {/* Abstract Visual */}
-          <div 
-            className={`relative section-fade ${isVisible ? 'visible' : ''}`}
-            style={{ transitionDelay: '300ms' }}
-          >
-            <div className="aspect-[4/5] relative">
-              {/* Background shape */}
-              <div className="absolute inset-4 bg-card border border-border" />
-              
-              {/* Overlapping geometric elements */}
-              <div className="absolute top-0 left-0 w-3/4 h-3/4 border-2 border-foreground/10" />
-              <div className="absolute bottom-0 right-0 w-2/3 h-2/3 bg-gradient-to-br from-muted to-secondary" />
-              
-              {/* Decorative lines */}
-              <div className="absolute top-1/4 left-1/4 right-1/4 h-px bg-border" />
-              <div className="absolute top-1/4 bottom-1/4 left-1/4 w-px bg-border" />
-              
-              {/* Central accent */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 border border-foreground/20 rotate-45" />
-            </div>
-          </div>
         </div>
       </div>
     </section>
