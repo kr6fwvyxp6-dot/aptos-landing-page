@@ -73,6 +73,17 @@ const Header = () => {
 
           {/* Language Switcher */}
           <div className="flex items-center gap-1 ml-4 border-l border-border pl-4">
+          <button
+              onClick={() => setLanguage('fi')}
+              className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
+                language === 'fi'
+                  ? 'text-foreground bg-secondary'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              FI
+            </button>
+            <span className="text-muted-foreground/50">/</span>
             <button
               onClick={() => setLanguage('en')}
               className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
@@ -82,17 +93,6 @@ const Header = () => {
               }`}
             >
               EN
-            </button>
-            <span className="text-muted-foreground/50">/</span>
-            <button
-              onClick={() => setLanguage('fi')}
-              className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
-                language === 'fi'
-                  ? 'text-foreground bg-secondary'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              FI
             </button>
           </div>
         </div>
