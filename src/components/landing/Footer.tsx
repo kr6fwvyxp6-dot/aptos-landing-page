@@ -98,7 +98,9 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="#"
+                href="https://www.facebook.com/profile.php?id=61586925637247"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors"
                 aria-label="Facebook"
               >
