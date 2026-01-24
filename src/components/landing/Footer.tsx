@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <footer id="contact" className="py-20 md:py-28 bg-secondary/30">
@@ -89,7 +89,9 @@ const Footer = () => {
             {/* Social Links */}
             <div className="flex items-center gap-6">
               <a
-                href="#"
+                href={language === 'en' ? 'https://www.instagram.com/aptosapartments/' : '#'}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors"
                 aria-label="Instagram"
               >
@@ -98,7 +100,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="https://www.facebook.com/profile.php?id=61586925637247"
+                href={language === 'fi' ? 'https://www.facebook.com/profile.php?id=61587002163655' : 'https://www.facebook.com/profile.php?id=61586925637247'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors"
