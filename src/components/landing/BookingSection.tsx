@@ -1,5 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Button } from '@/components/ui/button';
+
+// Declare the global SimplybookWidget for TypeScript
+declare global {
+  interface Window {
+    widget?: {
+      open: () => void;
+    };
+  }
+}
 
 const BookingSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -23,6 +33,13 @@ const BookingSection = () => {
     return () => observer.disconnect();
   }, []);
 
+  const openBookingWidget = () => {
+    // The widget is initialized globally in index.html
+    if (window.widget && typeof window.widget.open === 'function') {
+      window.widget.open();
+    }
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -45,6 +62,15 @@ const BookingSection = () => {
           <p className="text-lg text-muted-foreground leading-relaxed mb-12 max-w-2xl mx-auto">
             {t('booking.description')}
           </p>
+
+          {/* CTA Button */}
+          <Button
+            onClick={openBookingWidget}
+            size="lg"
+            className="btn-premium bg-primary text-primary-foreground hover:bg-primary/90 px-10 py-6 text-base font-medium tracking-wide"
+          >
+            {t('hero.cta')}
+          </Button>
         </div>
 
         {/* 
