@@ -34,9 +34,10 @@ const BookingSection = () => {
   }, []);
 
   const openBookingWidget = () => {
-    // The widget is initialized globally in index.html
-    if (window.widget && typeof window.widget.open === 'function') {
-      window.widget.open();
+    // Find and click the SimplyBook floating button injected into the DOM
+    const simplybookButton = document.querySelector('.simplybook-widget-button') as HTMLElement;
+    if (simplybookButton) {
+      simplybookButton.click();
     }
   };
 
