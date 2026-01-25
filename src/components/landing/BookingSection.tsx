@@ -1,17 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-declare global {
-  interface Window {
-    SimplybookWidget: any;
-  }
-}
-
 const BookingSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const widgetContainerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [widgetLoaded, setWidgetLoaded] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -30,65 +22,6 @@ const BookingSection = () => {
 
     return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-    // Initialize the SimplyBook widget when the script is loaded
-    const initWidget = () => {
-      if (window.SimplybookWidget && widgetContainerRef.current && !widgetLoaded) {
-        new window.SimplybookWidget({
-          widget_type: "iframe",
-          url: "https://aptos.simplybook.it",
-          theme: "default",
-          theme_settings: {
-            timeline_hide_unavailable: "1",
-            hide_past_days: "0",
-            timeline_show_end_time: "0",
-            timeline_modern_display: "as_slots",
-            sb_base_color: "#dd3649",
-            display_item_mode: "block",
-            booking_nav_bg_color: "#dd3649",
-            body_bg_color: "#f2f2f2",
-            sb_review_image: "",
-            dark_font_color: "#474747",
-            light_font_color: "#f5fcff",
-            btn_color_1: "#dd3649",
-            sb_company_label_color: "#552f34",
-            hide_img_mode: "1",
-            show_sidebar: "1",
-            sb_busy: "#c7b3b3",
-            sb_available: "#d6ebff"
-          },
-          timeline: "modern",
-          datepicker: "top_calendar",
-          is_rtl: false,
-          app_config: {
-            clear_session: 0,
-            allow_switch_to_ada: 0,
-            predefined: []
-          }
-        });
-        setWidgetLoaded(true);
-      }
-    };
-
-    // Check if script is already loaded
-    if (window.SimplybookWidget) {
-      initWidget();
-    } else {
-      // Wait for the script to load
-      const checkInterval = setInterval(() => {
-        if (window.SimplybookWidget) {
-          clearInterval(checkInterval);
-          initWidget();
-        }
-      }, 100);
-
-      // Cleanup interval after 10 seconds
-      setTimeout(() => clearInterval(checkInterval), 10000);
-
-      return () => clearInterval(checkInterval);
-    }
-  }, [widgetLoaded]);
 
   return (
     <section
@@ -116,7 +49,6 @@ const BookingSection = () => {
 
         {/* Booking Widget Container */}
         <div 
-          ref={widgetContainerRef}
           className={`max-w-3xl mx-auto section-fade ${isVisible ? 'visible' : ''}`}
           style={{ transitionDelay: '200ms' }}
         >
@@ -124,9 +56,16 @@ const BookingSection = () => {
             {/* Decorative border */}
             <div className="absolute -inset-px bg-gradient-to-br from-border via-transparent to-border opacity-50" />
             
-            {/* Main container - SimplyBook widget will render here */}
-            <div className="relative bg-card border border-border p-4 md:p-8 min-h-[600px]">
-              {/* The SimplyBook widget automatically creates an iframe and appends it to the body */}
+            {/* Main container with embedded iframe */}
+            <div className="relative bg-card border border-border overflow-hidden">
+              <iframe
+                src="https://aptos.simplybook.it/v2/?widget-type=iframe&theme=default&theme_settings%5Btimeline_hide_unavailable%5D=1&theme_settings%5Bhide_past_days%5D=0&theme_settings%5Btimeline_show_end_time%5D=0&theme_settings%5Btimeline_modern_display%5D=as_slots&theme_settings%5Bsb_base_color%5D=%232D3436&theme_settings%5Bdisplay_item_mode%5D=block&theme_settings%5Bbooking_nav_bg_color%5D=%232D3436&theme_settings%5Bbody_bg_color%5D=%23FAFAF8&theme_settings%5Bdark_font_color%5D=%232D3436&theme_settings%5Blight_font_color%5D=%23FAFAF8&theme_settings%5Bbtn_color_1%5D=%232D3436&theme_settings%5Bsb_company_label_color%5D=%232D3436&theme_settings%5Bhide_img_mode%5D=1&theme_settings%5Bshow_sidebar%5D=1&theme_settings%5Bsb_busy%5D=%23636E72&theme_settings%5Bsb_available%5D=%23F5F5F3&timeline=modern&datepicker=top_calendar&is_rtl=false"
+                width="100%"
+                height="600"
+                frameBorder="0"
+                title="Book a session with Aptos Apartments"
+                className="w-full min-h-[500px] md:min-h-[600px]"
+              />
             </div>
           </div>
         </div>
