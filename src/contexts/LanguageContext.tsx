@@ -16,7 +16,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.contact': 'Contact',
     
     // Hero
-    'hero.headline': 'Master Your Path to Apartment Investing',
+    'hero.headline': 'Master Your Path to Apartment Investing in Finland',
     'hero.subheadline': 'Book a complimentary sparring session to refine your strategy and gain the confidence to grow your portfolio.',
     'hero.cta': 'Book Your Session',
     'hero.scroll': 'Scroll to explore',
@@ -24,7 +24,7 @@ const translations: Record<Language, Record<string, string>> = {
     // About
     'about.label': 'The Approach',
     'about.headline': 'The Aptos Approach',
-    'about.description': 'At Aptos Apartments, we help emerging investors navigate the multifamily real estate market through personalized guidance and access to exclusive opportunities. Our approach combines deep market expertise with a commitment to your individual success.',
+    'about.description': 'At Aptos Apartments, we help emerging investors navigate the real estate market through personalized guidance and access to exclusive opportunities. Our approach combines deep market expertise with a commitment to your individual success.',
     'about.feature1.title': 'Personalized Guidance',
     'about.feature1.description': 'One-on-one strategy sessions tailored to your unique investment goals and risk profile.',
     'about.feature2.title': 'Market Insights',
@@ -59,7 +59,7 @@ const translations: Record<Language, Record<string, string>> = {
     // About
     'about.label': 'Lähestymistapa',
     'about.headline': 'Aptos-lähestymistapa',
-    'about.description': 'Aptos Apartmentsilla autamme aloittelevia sijoittajia navigoimaan moniasuntoisen kiinteistömarkkinan läpi henkilökohtaisen ohjauksen ja ainutlaatuisten mahdollisuuksien avulla. Lähestymistapamme yhdistää syvän markkinaosaamisen sitoutumiseen yksilölliseen menestykseesi.',
+    'about.description': 'Aptos Asunnoilla autamme aloittelevia sijoittajia navigoimaan  asuntomarkkinan läpi henkilökohtaisen ohjauksen ja ainutlaatuisten mahdollisuuksien avulla. Lähestymistapamme yhdistää syvän markkinaosaamisen sitoutumiseen yksilölliseen menestykseesi.',
     'about.feature1.title': 'Henkilökohtainen ohjaus',
     'about.feature1.description': 'Kahdenkeskiset strategiaistunnot räätälöitynä ainutlaatuisiin sijoitustavoitteisiisi ja riskiprofiiliisi.',
     'about.feature2.title': 'Markkinanäkemykset',
