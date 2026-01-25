@@ -47,28 +47,11 @@ const BookingSection = () => {
           </p>
         </div>
 
-        {/* Booking Widget Container */}
-        <div 
-          className={`max-w-3xl mx-auto section-fade ${isVisible ? 'visible' : ''}`}
-          style={{ transitionDelay: '200ms' }}
-        >
-          <div className="relative">
-            {/* Decorative border */}
-            <div className="absolute -inset-px bg-gradient-to-br from-border via-transparent to-border opacity-50" />
-            
-            {/* Main container with embedded iframe */}
-            <div className="relative bg-card border border-border overflow-hidden">
-              <iframe
-                src="https://aptos.simplybook.it/v2/?widget-type=iframe&theme=default&theme_settings%5Btimeline_hide_unavailable%5D=1&theme_settings%5Bhide_past_days%5D=0&theme_settings%5Btimeline_show_end_time%5D=0&theme_settings%5Btimeline_modern_display%5D=as_slots&theme_settings%5Bsb_base_color%5D=%232D3436&theme_settings%5Bdisplay_item_mode%5D=block&theme_settings%5Bbooking_nav_bg_color%5D=%232D3436&theme_settings%5Bbody_bg_color%5D=%23FAFAF8&theme_settings%5Bdark_font_color%5D=%232D3436&theme_settings%5Blight_font_color%5D=%23FAFAF8&theme_settings%5Bbtn_color_1%5D=%232D3436&theme_settings%5Bsb_company_label_color%5D=%232D3436&theme_settings%5Bhide_img_mode%5D=1&theme_settings%5Bshow_sidebar%5D=1&theme_settings%5Bsb_busy%5D=%23636E72&theme_settings%5Bsb_available%5D=%23F5F5F3&timeline=modern&datepicker=top_calendar&is_rtl=false"
-                width="100%"
-                height="600"
-                frameBorder="0"
-                title="Book a session with Aptos Apartments"
-                className="w-full min-h-[500px] md:min-h-[600px]"
-              />
-            </div>
-          </div>
-        </div>
+        {/* 
+          NOTE: The booking widget is now a floating button loaded via index.html
+          The button appears on the right side of the screen and opens a booking modal.
+          To update the widget, edit the script in index.html (search for "SIMPLYBOOK.ME WIDGET")
+        */}
       </div>
     </section>
   );
