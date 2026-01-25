@@ -1,9 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
+declare global {
+  interface Window {
+    SimplybookWidget: any;
+  }
+}
+
 const BookingSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const widgetContainerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [widgetLoaded, setWidgetLoaded] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -22,6 +30,65 @@ const BookingSection = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    // Initialize the SimplyBook widget when the script is loaded
+    const initWidget = () => {
+      if (window.SimplybookWidget && widgetContainerRef.current && !widgetLoaded) {
+        new window.SimplybookWidget({
+          widget_type: "iframe",
+          url: "https://aptos.simplybook.it",
+          theme: "default",
+          theme_settings: {
+            timeline_hide_unavailable: "1",
+            hide_past_days: "0",
+            timeline_show_end_time: "0",
+            timeline_modern_display: "as_slots",
+            sb_base_color: "#dd3649",
+            display_item_mode: "block",
+            booking_nav_bg_color: "#dd3649",
+            body_bg_color: "#f2f2f2",
+            sb_review_image: "",
+            dark_font_color: "#474747",
+            light_font_color: "#f5fcff",
+            btn_color_1: "#dd3649",
+            sb_company_label_color: "#552f34",
+            hide_img_mode: "1",
+            show_sidebar: "1",
+            sb_busy: "#c7b3b3",
+            sb_available: "#d6ebff"
+          },
+          timeline: "modern",
+          datepicker: "top_calendar",
+          is_rtl: false,
+          app_config: {
+            clear_session: 0,
+            allow_switch_to_ada: 0,
+            predefined: []
+          }
+        });
+        setWidgetLoaded(true);
+      }
+    };
+
+    // Check if script is already loaded
+    if (window.SimplybookWidget) {
+      initWidget();
+    } else {
+      // Wait for the script to load
+      const checkInterval = setInterval(() => {
+        if (window.SimplybookWidget) {
+          clearInterval(checkInterval);
+          initWidget();
+        }
+      }, 100);
+
+      // Cleanup interval after 10 seconds
+      setTimeout(() => clearInterval(checkInterval), 10000);
+
+      return () => clearInterval(checkInterval);
+    }
+  }, [widgetLoaded]);
 
   return (
     <section
@@ -49,6 +116,7 @@ const BookingSection = () => {
 
         {/* Booking Widget Container */}
         <div 
+          ref={widgetContainerRef}
           className={`max-w-3xl mx-auto section-fade ${isVisible ? 'visible' : ''}`}
           style={{ transitionDelay: '200ms' }}
         >
@@ -56,63 +124,9 @@ const BookingSection = () => {
             {/* Decorative border */}
             <div className="absolute -inset-px bg-gradient-to-br from-border via-transparent to-border opacity-50" />
             
-            {/* Main container */}
-            <div className="relative bg-card border border-border p-8 md:p-12">
-              {/* 
-                SimplyBook.me Integration Instructions:
-                
-                To embed your SimplyBook.me booking widget, replace the placeholder below with one of these options:
-                
-                Option 1 - iframe embed:
-                <iframe 
-                  src="https://YOUR-COMPANY.simplybook.me/v2/" 
-                  width="100%" 
-                  height="600" 
-                  frameBorder="0"
-                  title="Book a session with Aptos Apartments"
-                />
-                
-                Option 2 - Script embed (recommended for better styling):
-                Add to your index.html before </body>:
-                <script src="//widget.simplybook.me/v2/widget/widget.js"></script>
-                
-                Then use the widget configuration from your SimplyBook.me dashboard.
-                
-                For responsive height, consider using:
-                - Mobile: 500-600px
-                - Tablet: 600-700px  
-                - Desktop: 600-800px
-              */}
-              
-              {/* Placeholder UI */}
-              <div className="min-h-[400px] md:min-h-[500px] flex flex-col items-center justify-center text-center">
-                <div className="w-16 h-16 border-2 border-muted-foreground/30 mb-6 flex items-center justify-center">
-                  <svg
-                    className="w-8 h-8 text-muted-foreground/50"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                </div>
-                
-                <h3 className="font-serif text-xl md:text-2xl font-medium text-foreground mb-3">
-                  {t('booking.widget.title')}
-                </h3>
-                
-                <p className="text-muted-foreground max-w-md">
-                  {t('booking.widget.description')}
-                </p>
-                
-                {/* Visual separator */}
-                <div className="w-16 h-px bg-border mt-8" />
-              </div>
+            {/* Main container - SimplyBook widget will render here */}
+            <div className="relative bg-card border border-border p-4 md:p-8 min-h-[600px]">
+              {/* The SimplyBook widget automatically creates an iframe and appends it to the body */}
             </div>
           </div>
         </div>
