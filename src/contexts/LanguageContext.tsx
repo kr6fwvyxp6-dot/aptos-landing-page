@@ -11,6 +11,7 @@ interface LanguageContextType {
 const translations: Record<Language, Record<string, string>> = {
   en: {
     // Header
+    'header.logo': 'Aptos Apartments',
     'nav.about': 'About',
     'nav.book': 'Book',
     'nav.contact': 'Contact',
@@ -46,6 +47,7 @@ const translations: Record<Language, Record<string, string>> = {
   },
   fi: {
     // Header
+    'header.logo': 'Aptos Asunnot',
     'nav.about': 'Tietoa',
     'nav.book': 'Varaa',
     'nav.contact': 'Yhteystiedot',
