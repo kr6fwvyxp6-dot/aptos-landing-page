@@ -43,7 +43,7 @@ const Header = () => {
           }}
           className="font-serif text-xl md:text-2xl font-medium tracking-tight text-foreground hover:opacity-80 transition-opacity"
         >
-          Aptos Apartments
+          {t('header.logo')}
         </a>
 
         {/* Desktop Navigation */}

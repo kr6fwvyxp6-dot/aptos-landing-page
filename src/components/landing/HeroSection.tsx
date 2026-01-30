@@ -4,10 +4,10 @@ import { useLanguage } from '@/contexts/LanguageContext';
 const HeroSection = () => {
   const { t } = useLanguage();
 
-  const scrollToBooking = () => {
-    const element = document.getElementById('booking');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const openBookingWidget = () => {
+    const simplybookButton = document.querySelector('.simplybook-widget-button') as HTMLElement;
+    if (simplybookButton) {
+      simplybookButton.click();
     }
   };
 
@@ -53,7 +53,7 @@ const HeroSection = () => {
             style={{ animationDelay: '0.8s' }}
           >
             <Button
-              onClick={scrollToBooking}
+              onClick={openBookingWidget}
               size="lg"
               className="btn-premium bg-primary text-primary-foreground hover:bg-primary/90 px-10 py-6 text-base font-medium tracking-wide"
             >
