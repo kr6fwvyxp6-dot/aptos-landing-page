@@ -19,7 +19,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Hero
     'hero.headline': 'Master Your Path to Apartment Investing in Finland',
     'hero.subheadline': 'Book a complimentary sparring session to refine your strategy and gain the confidence to grow your portfolio.',
-    'hero.cta': 'Book Your Session',
+    'hero.cta': 'Book Your Free Session',
     'hero.scroll': 'Scroll to explore',
     
     // About
@@ -55,7 +55,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Hero
     'hero.headline': 'Hallitse polkusi asuntosijoittamiseen',
     'hero.subheadline': 'Varaa maksuton sparraussessio hiomaan strategiaasi ja saadaksesi itsevarmuutta kasvattaa portfoliotasi.',
-    'hero.cta': 'Varaa aika',
+    'hero.cta': 'Varaa ilmainen aika',
     'hero.scroll': 'Vieritä tutkimaan',
     
     // About
