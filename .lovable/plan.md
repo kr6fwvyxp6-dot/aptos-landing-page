@@ -1,158 +1,84 @@
 
-# Aptos Apartments Landing Page
+Goal
+- Fix the Cal.com inline embed so switching language never results in “Error Code: 500. Something went wrong”.
+- Ensure Finnish shows only the Finnish calendar and English shows only the English calendar (at least visually), while keeping the embed stable across language toggles.
 
-## Overview
-A modern, minimalist single-page landing page with Scandinavian/Nordic design aesthetic featuring clean lines, generous white space, and premium typography.
+What’s most likely happening
+- The Cal embed script injects a custom element (<cal-inline> + an iframe) into your container.
+- When you switch languages, React currently unmounts one container and mounts the other (because of the conditional render).
+- Many third‑party embeds (including Cal embeds) don’t tolerate being “torn down” and then re-initialized repeatedly in a SPA without a proper destroy/unmount API. That can leave stale embed state behind and cause the next embed initialization to fail, showing a 500 inside the iframe.
 
-## Design System Updates
+High-confidence fix (stability-first)
+Instead of unmounting/remounting the calendar container on language switch, keep both containers mounted for the lifetime of the page and only toggle visibility. Initialize each calendar only once, the first time it’s needed.
 
-### Color Palette (Scandinavian Theme)
-| Element | Color |
-|---------|-------|
-| Background | Warm off-white (#FAFAF8) |
-| Secondary Background | Soft warm grey (#F5F5F3) |
-| Primary Text | Muted charcoal (#2D3436) |
-| Secondary Text | Soft grey (#636E72) |
-| Accent | Deep charcoal (#1A1A1A) |
-| Borders | Light grey (#E8E8E6) |
+Implementation steps (code changes)
+1) Update BookingSection to keep both calendar containers mounted
+- In src/components/landing/BookingSection.tsx:
+  - Render both containers always:
+    - #my-cal-inline-ilmainen-asuntosijoitus-sparraus
+    - #my-cal-inline-apartment-investing-in-finland-free-call
+  - Use Tailwind to show/hide based on language:
+    - Finnish container: className={language === 'fi' ? '' : 'hidden'}
+    - English container: className={language === 'en' ? '' : 'hidden'}
+  - Add aria-hidden for the hidden one (optional but recommended).
 
-### Typography
-- **Headings**: Playfair Display (serif) - elegant, professional feel
-- **Body**: Inter (sans-serif) - clean, modern readability
-- Both fonts will be loaded via Google Fonts
+2) Stop re-initializing Cal on every language change
+- Replace the current “initialize in useEffect([language]) every time” approach with:
+  - One effect that loads the embed script once (on mount), and tracks when it’s ready.
+  - A second effect that initializes the calendar for the active language only if it hasn’t been initialized before.
 
-### Custom CSS Variables
-New CSS variables will be added to support the Scandinavian palette while maintaining the existing design system structure.
+3) Use refs (HTMLElement) instead of selectors (more robust)
+- Create two refs:
+  - fiContainerRef
+  - enContainerRef
+- When calling inline, pass the element directly:
+  - elementOrSelector: fiContainerRef.current (instead of "#my-cal-inline-...")
+This reduces the chance of issues if the embed script replaces nodes or if IDs briefly don’t match during rerenders.
 
----
+4) Track per-language initialization state
+- Add something like:
+  - const initializedRef = useRef({ fi: false, en: false });
+- When language changes:
+  - if initializedRef.current[language] is true: do nothing (just show/hide)
+  - else: run init + inline + ui for that language once, then set initializedRef accordingly.
 
-## Page Sections
+5) Ensure the embed script is loaded exactly once and wait for it
+- In the “load script” effect:
+  - If window.Cal?.loaded is true, mark “ready” immediately.
+  - Else, check if a <script src="https://app.cal.eu/embed/embed.js"> already exists:
+    - If not, create it and set script.onload to set “ready”.
+    - If yes, attach an onload listener (or poll) to set “ready”.
 
-### 1. Navigation Header
-- Fixed/sticky minimal header
-- "Aptos Apartments" logo/wordmark (left)
-- Navigation links: About, Book, Contact (right)
-- Smooth scroll navigation to each section
-- Subtle background blur on scroll
+6) Optional: clear container only on first initialization (not every toggle)
+- Before calling inline the first time for a language:
+  - containerRef.current.innerHTML = ''
+This avoids accumulating multiple iframes if Cal re-appends.
 
-### 2. Hero Section
-- Full viewport height
-- Large serif headline: "Master Your Path to Apartment Investing"
-- Subheadline: "Book a complimentary sparring session to refine your strategy and gain the confidence to grow your portfolio."
-- Primary CTA button: "Book Your Session"
-- Abstract architectural background image (decorative geometric pattern or gradient)
-- Generous padding and white space
+7) Clean up leftover SimplyBook translation strings (optional housekeeping)
+- src/contexts/LanguageContext.tsx still contains booking.widget.* strings referencing SimplyBook.
+- If those are unused now, remove or update them to Cal wording to avoid confusion later.
 
-### 3. About/Offer Section
-- Clean two-column layout (text + abstract image)
-- Section title: "The Aptos Approach"
-- Body copy explaining personalized guidance and exclusive opportunities
-- Key differentiators in subtle card format
-- Minimalist decorative elements (thin lines, geometric shapes)
+Files to change
+- src/components/landing/BookingSection.tsx (main fix)
+- src/contexts/LanguageContext.tsx (optional cleanup only)
 
-### 4. Booking Section
-- Section title: "Schedule Your Session"
-- Brief intro text
-- Styled container for SimplyBook.me iframe placeholder
-- The container will have:
-  - Elegant border treatment
-  - Proper responsive sizing
-  - Placeholder text indicating where the booking widget goes
-  - Clear integration instructions in code comments
+How we’ll verify the fix (acceptance tests)
+1) Desktop
+- Load page in Finnish, scroll to Booking: Finnish calendar loads and works.
+- Switch to English (while staying on Booking): English calendar appears and works (no 500).
+- Switch back and forth 5–10 times: no errors; always only the correct calendar visible.
 
-### 5. Contact/Footer Section
-- "Get in Touch" heading (serif)
-- Email address with hover effect
-- Phone number
-- Minimal social links (optional placeholders)
-- Copyright line
-- Clean horizontal separator
+2) Mobile
+- Repeat the same switching tests (especially important because “useSlotsViewOnSmallScreen” is enabled).
 
----
+3) Hard refresh + switch language
+- Refresh on English, confirm English calendar is correct.
+- Switch to Finnish, confirm Finnish calendar is correct.
 
-## Technical Implementation
+Fallback plan if Cal embed still fails
+- Enable Cal embed logging (Cal’s docs mention using ?cal.embed.logging=1 on the page URL) and inspect console/network to see what request returns 500.
+- If the 500 is coming from Cal’s backend only in embedded mode (rare, but possible due to embed state), replace embed.js usage with a direct iframe embed approach (if Cal provides a stable iframe URL for inline booking), which avoids the “SPA re-init” problem entirely.
 
-### Files to Create/Modify
-
-| File | Purpose |
-|------|---------|
-| `src/index.css` | Update CSS variables for Scandinavian palette, add Google Fonts, smooth scroll |
-| `src/pages/Index.tsx` | Complete landing page with all sections |
-| `src/components/landing/Header.tsx` | Sticky navigation component |
-| `src/components/landing/HeroSection.tsx` | Hero with headline and CTA |
-| `src/components/landing/AboutSection.tsx` | The offer/about section |
-| `src/components/landing/BookingSection.tsx` | Booking iframe container |
-| `src/components/landing/Footer.tsx` | Contact info and footer |
-
-### Interactive Elements
-- **Button Hover States**: Subtle scale transform and background color shift
-- **Smooth Scroll**: CSS `scroll-behavior: smooth` with JavaScript fallback
-- **Navigation**: Active section highlighting
-- **Image Hover**: Subtle zoom/parallax effect on decorative images
-- **Link Underlines**: Animated underline on hover
-
-### Responsive Breakpoints
-- Mobile: < 768px (stacked layouts, adjusted typography)
-- Tablet: 768px - 1024px (hybrid layouts)
-- Desktop: > 1024px (full side-by-side layouts)
-
-### Animations
-- Fade-in on scroll for sections (using Tailwind animate plugin)
-- Subtle entrance animations for hero content
-- Smooth transitions on all interactive elements (300ms ease)
-
----
-
-## Technical Details
-
-### Google Fonts Integration
-```html
-<!-- Added to index.html -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-```
-
-### Tailwind Config Extensions
-- Custom font families (`font-serif` and `font-sans`)
-- Custom animation keyframes for fade-in effects
-- Extended spacing for generous whitespace
-
-### Booking Widget Placeholder
-The SimplyBook.me integration will be prepared with:
-- A styled container with proper dimensions
-- Placeholder content explaining integration
-- Code comments with iframe embed instructions
-- Responsive height adjustments
-
----
-
-## Component Architecture
-
-```text
-Index.tsx
-├── Header (sticky navigation)
-├── HeroSection
-│   ├── Headline + Subheadline
-│   └── CTA Button
-├── AboutSection
-│   ├── Section Title
-│   ├── Description
-│   └── Feature Cards (optional)
-├── BookingSection
-│   ├── Section Title
-│   └── Iframe Container (placeholder)
-└── Footer
-    ├── Contact Info
-    └── Copyright
-```
-
----
-
-## Deliverables
-
-1. **Updated design system** with Scandinavian color palette
-2. **Responsive landing page** with all 5 sections
-3. **Modular components** for each section
-4. **Smooth scroll navigation** between sections
-5. **Premium hover effects** on all interactive elements
-6. **SimplyBook.me ready container** with integration instructions
-7. **Mobile-optimized layout** for all screen sizes
+Why this should work
+- It removes the problematic lifecycle: “unmount calendar A” → “recreate calendar B”.
+- Each calendar initializes once, and language switching becomes a simple show/hide toggle, which is the most reliable pattern for third-party embed widgets in React SPAs.
