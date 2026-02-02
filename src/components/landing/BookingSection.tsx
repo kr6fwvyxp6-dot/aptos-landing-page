@@ -17,6 +17,7 @@ const BookingSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const { language } = useLanguage();
+  const lastEmbeddedLanguageRef = useRef<string | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,6 +38,10 @@ const BookingSection = () => {
 
   // Load Cal.com embed script and initialize the appropriate calendar
   useEffect(() => {
+    // In React dev (StrictMode) effects can run twice; avoid double-embedding.
+    if (lastEmbeddedLanguageRef.current === language) return;
+    lastEmbeddedLanguageRef.current = language;
+
     // Load the Cal.com script
     const loadCalScript = () => {
       (function (C: Window, A: string, L: string) {
@@ -71,6 +76,16 @@ const BookingSection = () => {
     };
 
     loadCalScript();
+
+    const targetElementId =
+      language === 'fi'
+        ? 'my-cal-inline-ilmainen-asuntosijoitus-sparraus'
+        : 'my-cal-inline-apartment-investing-in-finland-free-call';
+
+    // If React reuses the same DOM node between languages, previous iframe(s) can persist.
+    // Clearing ensures only the active language calendar remains visible.
+    const targetEl = document.getElementById(targetElementId);
+    if (targetEl) targetEl.innerHTML = '';
 
     // Initialize ONLY the calendar for the current language
     if (language === 'fi') {
@@ -122,12 +137,14 @@ const BookingSection = () => {
         <div className="max-w-4xl mx-auto">
           {language === 'fi' ? (
             <div 
+              key="fi"
               style={{ width: '100%', height: '700px', overflow: 'auto' }} 
               id="my-cal-inline-ilmainen-asuntosijoitus-sparraus"
               className="bg-background rounded-lg"
             />
           ) : (
             <div 
+              key="en"
               style={{ width: '100%', height: '700px', overflow: 'auto' }} 
               id="my-cal-inline-apartment-investing-in-finland-free-call"
               className="bg-background rounded-lg"
