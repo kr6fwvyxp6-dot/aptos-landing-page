@@ -15,10 +15,14 @@ declare global {
 
 const BookingSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const fiContainerRef = useRef<HTMLDivElement>(null);
+  const enContainerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [scriptReady, setScriptReady] = useState(false);
+  const initializedRef = useRef<{ fi: boolean; en: boolean }>({ fi: false, en: false });
   const { language } = useLanguage();
-  const lastEmbeddedLanguageRef = useRef<string | null>(null);
 
+  // Intersection observer for fade-in animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -36,76 +40,108 @@ const BookingSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Load Cal.com embed script and initialize the appropriate calendar
+  // Load the Cal.com embed script ONCE on mount
   useEffect(() => {
-    // In React dev (StrictMode) effects can run twice; avoid double-embedding.
-    if (lastEmbeddedLanguageRef.current === language) return;
-    lastEmbeddedLanguageRef.current = language;
+    // Already loaded or marked ready
+    if (window.Cal?.loaded) {
+      setScriptReady(true);
+      return;
+    }
 
-    // Load the Cal.com script
-    const loadCalScript = () => {
-      (function (C: Window, A: string, L: string) {
-        const p = function (a: { q: unknown[] }, ar: unknown) { a.q.push(ar); };
-        const d = C.document;
-        C.Cal = C.Cal || function () {
-          const cal = C.Cal!;
-          const ar = arguments;
-          if (!cal.loaded) {
-            cal.ns = {};
-            cal.q = cal.q || [];
-            const script = d.head.appendChild(d.createElement("script"));
-            script.src = A;
-            cal.loaded = true;
+    // Check if script already exists in the DOM
+    const existingScript = document.querySelector('script[src="https://app.cal.eu/embed/embed.js"]');
+    
+    if (existingScript) {
+      // Script tag exists, wait for it to load
+      const checkLoaded = () => {
+        if (window.Cal?.loaded) {
+          setScriptReady(true);
+        } else {
+          setTimeout(checkLoaded, 100);
+        }
+      };
+      checkLoaded();
+      return;
+    }
+
+    // Create and load the script
+    (function (C: Window, A: string, L: string) {
+      const p = function (a: { q: unknown[] }, ar: unknown) { a.q.push(ar); };
+      const d = C.document;
+      C.Cal = C.Cal || function () {
+        const cal = C.Cal!;
+        const ar = arguments;
+        if (!cal.loaded) {
+          cal.ns = {};
+          cal.q = cal.q || [];
+          const script = d.head.appendChild(d.createElement("script"));
+          script.src = A;
+          script.onload = () => {
+            setScriptReady(true);
+          };
+          cal.loaded = true;
+        }
+        if (ar[0] === L) {
+          const api = function () { p(api as unknown as { q: unknown[] }, arguments); } as unknown as { q: unknown[]; (action: string, config: unknown): void };
+          const namespace = ar[1] as string;
+          api.q = api.q || [];
+          if (typeof namespace === "string") {
+            cal.ns![namespace] = cal.ns![namespace] || api;
+            p(cal.ns![namespace] as unknown as { q: unknown[] }, ar);
+            p(cal as unknown as { q: unknown[] }, ["initNamespace", namespace]);
+          } else {
+            p(cal as unknown as { q: unknown[] }, ar);
           }
-          if (ar[0] === L) {
-            const api = function () { p(api as unknown as { q: unknown[] }, arguments); } as unknown as { q: unknown[]; (action: string, config: unknown): void };
-            const namespace = ar[1] as string;
-            api.q = api.q || [];
-            if (typeof namespace === "string") {
-              cal.ns![namespace] = cal.ns![namespace] || api;
-              p(cal.ns![namespace] as unknown as { q: unknown[] }, ar);
-              p(cal as unknown as { q: unknown[] }, ["initNamespace", namespace]);
-            } else {
-              p(cal as unknown as { q: unknown[] }, ar);
-            }
-            return;
-          }
-          p(cal as unknown as { q: unknown[] }, ar);
-        };
-      })(window, "https://app.cal.eu/embed/embed.js", "init");
-    };
+          return;
+        }
+        p(cal as unknown as { q: unknown[] }, ar);
+      };
+    })(window, "https://app.cal.eu/embed/embed.js", "init");
 
-    loadCalScript();
+    // Mark ready after a short delay if the onload doesn't fire (fallback)
+    const fallbackTimeout = setTimeout(() => {
+      if (window.Cal?.loaded) {
+        setScriptReady(true);
+      }
+    }, 2000);
 
-    const targetElementId =
-      language === 'fi'
-        ? 'my-cal-inline-ilmainen-asuntosijoitus-sparraus'
-        : 'my-cal-inline-apartment-investing-in-finland-free-call';
+    return () => clearTimeout(fallbackTimeout);
+  }, []);
 
-    // If React reuses the same DOM node between languages, previous iframe(s) can persist.
-    // Clearing ensures only the active language calendar remains visible.
-    const targetEl = document.getElementById(targetElementId);
-    if (targetEl) targetEl.innerHTML = '';
+  // Initialize the calendar for the current language ONLY if not already initialized
+  useEffect(() => {
+    if (!scriptReady) return;
 
-    // Initialize ONLY the calendar for the current language
-    if (language === 'fi') {
+    if (language === 'fi' && !initializedRef.current.fi && fiContainerRef.current) {
+      // Clear container before first init
+      fiContainerRef.current.innerHTML = '';
+      
       window.Cal?.("init", "ilmainen-asuntosijoitus-sparraus", { origin: "https://app.cal.eu" });
       window.Cal?.ns?.["ilmainen-asuntosijoitus-sparraus"]?.("inline", {
-        elementOrSelector: "#my-cal-inline-ilmainen-asuntosijoitus-sparraus",
+        elementOrSelector: fiContainerRef.current,
         config: { "layout": "month_view", "useSlotsViewOnSmallScreen": "true" },
         calLink: "aptos/ilmainen-asuntosijoitus-sparraus",
       });
       window.Cal?.ns?.["ilmainen-asuntosijoitus-sparraus"]?.("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
-    } else {
+      
+      initializedRef.current.fi = true;
+    }
+
+    if (language === 'en' && !initializedRef.current.en && enContainerRef.current) {
+      // Clear container before first init
+      enContainerRef.current.innerHTML = '';
+      
       window.Cal?.("init", "apartment-investing-in-finland-free-call", { origin: "https://app.cal.eu" });
       window.Cal?.ns?.["apartment-investing-in-finland-free-call"]?.("inline", {
-        elementOrSelector: "#my-cal-inline-apartment-investing-in-finland-free-call",
+        elementOrSelector: enContainerRef.current,
         config: { "layout": "month_view", "useSlotsViewOnSmallScreen": "true" },
         calLink: "aptos/apartment-investing-in-finland-free-call",
       });
       window.Cal?.ns?.["apartment-investing-in-finland-free-call"]?.("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
+      
+      initializedRef.current.en = true;
     }
-  }, [language]);
+  }, [scriptReady, language]);
 
   return (
     <section
@@ -133,23 +169,25 @@ const BookingSection = () => {
           </p>
         </div>
 
-        {/* Cal.com Inline Calendar */}
+        {/* Cal.com Inline Calendars - BOTH always mounted, visibility toggled */}
         <div className="max-w-4xl mx-auto">
-          {language === 'fi' ? (
-            <div 
-              key="fi"
-              style={{ width: '100%', height: '700px', overflow: 'auto' }} 
-              id="my-cal-inline-ilmainen-asuntosijoitus-sparraus"
-              className="bg-background rounded-lg"
-            />
-          ) : (
-            <div 
-              key="en"
-              style={{ width: '100%', height: '700px', overflow: 'auto' }} 
-              id="my-cal-inline-apartment-investing-in-finland-free-call"
-              className="bg-background rounded-lg"
-            />
-          )}
+          {/* Finnish calendar container */}
+          <div 
+            ref={fiContainerRef}
+            style={{ width: '100%', height: '700px', overflow: 'auto' }} 
+            id="my-cal-inline-ilmainen-asuntosijoitus-sparraus"
+            className={`bg-background rounded-lg ${language === 'fi' ? '' : 'hidden'}`}
+            aria-hidden={language !== 'fi'}
+          />
+          
+          {/* English calendar container */}
+          <div 
+            ref={enContainerRef}
+            style={{ width: '100%', height: '700px', overflow: 'auto' }} 
+            id="my-cal-inline-apartment-investing-in-finland-free-call"
+            className={`bg-background rounded-lg ${language === 'en' ? '' : 'hidden'}`}
+            aria-hidden={language !== 'en'}
+          />
         </div>
       </div>
     </section>
