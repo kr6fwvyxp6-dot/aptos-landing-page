@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Button } from '@/components/ui/button';
 
-// Declare the global SimplybookWidget for TypeScript
+// Declare Cal for TypeScript
 declare global {
   interface Window {
-    widget?: {
-      open: () => void;
+    Cal?: {
+      (action: string, ...args: unknown[]): void;
+      ns?: Record<string, (action: string, config: unknown) => void>;
+      loaded?: boolean;
+      q?: unknown[];
     };
   }
 }
@@ -14,7 +16,7 @@ declare global {
 const BookingSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const { t } = useLanguage();
+  const { language } = useLanguage();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -33,13 +35,62 @@ const BookingSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const openBookingWidget = () => {
-    // Find and click the SimplyBook floating button injected into the DOM
-    const simplybookButton = document.querySelector('.simplybook-widget-button') as HTMLElement;
-    if (simplybookButton) {
-      simplybookButton.click();
+  // Load Cal.com embed script and initialize the appropriate calendar
+  useEffect(() => {
+    // Load the Cal.com script
+    const loadCalScript = () => {
+      (function (C: Window, A: string, L: string) {
+        const p = function (a: { q: unknown[] }, ar: unknown) { a.q.push(ar); };
+        const d = C.document;
+        C.Cal = C.Cal || function () {
+          const cal = C.Cal!;
+          const ar = arguments;
+          if (!cal.loaded) {
+            cal.ns = {};
+            cal.q = cal.q || [];
+            const script = d.head.appendChild(d.createElement("script"));
+            script.src = A;
+            cal.loaded = true;
+          }
+          if (ar[0] === L) {
+            const api = function () { p(api as unknown as { q: unknown[] }, arguments); } as unknown as { q: unknown[]; (action: string, config: unknown): void };
+            const namespace = ar[1] as string;
+            api.q = api.q || [];
+            if (typeof namespace === "string") {
+              cal.ns![namespace] = cal.ns![namespace] || api;
+              p(cal.ns![namespace] as unknown as { q: unknown[] }, ar);
+              p(cal as unknown as { q: unknown[] }, ["initNamespace", namespace]);
+            } else {
+              p(cal as unknown as { q: unknown[] }, ar);
+            }
+            return;
+          }
+          p(cal as unknown as { q: unknown[] }, ar);
+        };
+      })(window, "https://app.cal.eu/embed/embed.js", "init");
+    };
+
+    loadCalScript();
+
+    // Initialize the appropriate calendar based on language
+    if (language === 'fi') {
+      window.Cal?.("init", "ilmainen-asuntosijoitus-sparraus", { origin: "https://app.cal.eu" });
+      window.Cal?.ns?.["ilmainen-asuntosijoitus-sparraus"]?.("inline", {
+        elementOrSelector: "#my-cal-inline-ilmainen-asuntosijoitus-sparraus",
+        config: { "layout": "month_view", "useSlotsViewOnSmallScreen": "true" },
+        calLink: "aptos/ilmainen-asuntosijoitus-sparraus",
+      });
+      window.Cal?.ns?.["ilmainen-asuntosijoitus-sparraus"]?.("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
+    } else {
+      window.Cal?.("init", "apartment-investing-in-finland-free-call", { origin: "https://app.cal.eu" });
+      window.Cal?.ns?.["apartment-investing-in-finland-free-call"]?.("inline", {
+        elementOrSelector: "#my-cal-inline-apartment-investing-in-finland-free-call",
+        config: { "layout": "month_view", "useSlotsViewOnSmallScreen": "true" },
+        calLink: "aptos/apartment-investing-in-finland-free-call",
+      });
+      window.Cal?.ns?.["apartment-investing-in-finland-free-call"]?.("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
     }
-  };
+  }, [language]);
 
   return (
     <section
@@ -51,34 +102,38 @@ const BookingSection = () => {
         <div className={`max-w-4xl mx-auto text-center section-fade ${isVisible ? 'visible' : ''}`}>
           {/* Section Label */}
           <span className="text-sm font-medium tracking-widest uppercase text-muted-foreground mb-4 block">
-            {t('booking.label')}
+            {language === 'fi' ? 'Aloita' : 'Get Started'}
           </span>
 
           {/* Heading */}
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-foreground mb-6">
-            {t('booking.headline')}
+            {language === 'fi' ? 'Varaa aikasi' : 'Schedule Your Session'}
           </h2>
 
           {/* Description */}
           <p className="text-lg text-muted-foreground leading-relaxed mb-12 max-w-2xl mx-auto">
-            {t('booking.description')}
+            {language === 'fi' 
+              ? 'Ota ensimmäinen askel kohti asuntosijoittamisen hallintaa. Varaa maksuton strategiaistunto ja löydä miten rakentaa portfolio, joka vastaa tavoitteitasi.'
+              : 'Take the first step toward mastering apartment investing. Book your complimentary strategy session and discover how to build a portfolio that aligns with your goals.'}
           </p>
-
-          {/* CTA Button */}
-          <Button
-            onClick={openBookingWidget}
-            size="lg"
-            className="btn-premium bg-primary text-primary-foreground hover:bg-primary/90 px-10 py-6 text-base font-medium tracking-wide"
-          >
-            {t('hero.cta')}
-          </Button>
         </div>
 
-        {/* 
-          NOTE: The booking widget is now a floating button loaded via index.html
-          The button appears on the right side of the screen and opens a booking modal.
-          To update the widget, edit the script in index.html (search for "SIMPLYBOOK.ME WIDGET")
-        */}
+        {/* Cal.com Inline Calendar */}
+        <div className="max-w-4xl mx-auto">
+          {language === 'fi' ? (
+            <div 
+              style={{ width: '100%', height: '700px', overflow: 'auto' }} 
+              id="my-cal-inline-ilmainen-asuntosijoitus-sparraus"
+              className="bg-background rounded-lg"
+            />
+          ) : (
+            <div 
+              style={{ width: '100%', height: '700px', overflow: 'auto' }} 
+              id="my-cal-inline-apartment-investing-in-finland-free-call"
+              className="bg-background rounded-lg"
+            />
+          )}
+        </div>
       </div>
     </section>
   );
