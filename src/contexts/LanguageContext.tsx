@@ -37,8 +37,8 @@ const translations: Record<Language, Record<string, string>> = {
     'booking.label': 'Get Started',
     'booking.headline': 'Schedule Your Session',
     'booking.description': 'Take the first step toward mastering apartment investing. Book your complimentary strategy session and discover how to build a portfolio that aligns with your goals.',
-    'booking.widget.title': 'Booking Widget',
-    'booking.widget.description': 'Your SimplyBook.me calendar will appear here. See the code comments for integration instructions.',
+    'booking.widget.title': 'Calendar',
+    'booking.widget.description': 'Select a time that works for you.',
     
     // Footer
     'footer.label': 'Contact',
@@ -73,8 +73,8 @@ const translations: Record<Language, Record<string, string>> = {
     'booking.label': 'Aloita',
     'booking.headline': 'Varaa aikasi',
     'booking.description': 'Ota ensimmäinen askel kohti asuntosijoittamisen hallintaa. Varaa maksuton strategiaistunto ja löydä miten rakentaa portfolio, joka vastaa tavoitteitasi.',
-    'booking.widget.title': 'Varausjärjestelmä',
-    'booking.widget.description': 'SimplyBook.me-kalenterisi tulee näkymään tässä. Katso koodikommentit integraatio-ohjeita varten.',
+    'booking.widget.title': 'Kalenteri',
+    'booking.widget.description': 'Valitse sinulle sopiva aika.',
     
     // Footer
     'footer.label': 'Yhteystiedot',
