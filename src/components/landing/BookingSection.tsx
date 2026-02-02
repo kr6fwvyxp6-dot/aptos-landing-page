@@ -72,7 +72,7 @@ const BookingSection = () => {
 
     loadCalScript();
 
-    // Initialize the appropriate calendar based on language
+    // Initialize ONLY the calendar for the current language
     if (language === 'fi') {
       window.Cal?.("init", "ilmainen-asuntosijoitus-sparraus", { origin: "https://app.cal.eu" });
       window.Cal?.ns?.["ilmainen-asuntosijoitus-sparraus"]?.("inline", {
