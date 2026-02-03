@@ -50,11 +50,11 @@ const FAQ = () => {
     },
     {
       question: 'How liquid is the Finnish apartment market?',
-      answer: 'Liquidity varies dramatically by location. Apartments in Helsinki typically sell within weeks. In smaller cities or less desirable areas, selling can take 6-12 months or longer. Studio apartments in declining population areas can be particularly difficult to sell. Always research local market conditions before investing.',
+      answer: 'Liquidity varies dramatically by location. Apartments in the major cities typically sell within 1-3 months if priced right. In smaller cities or less desirable areas, selling can take 6-12 months or longer. Studio apartments in declining population areas can be particularly difficult to sell. Always research local market conditions before investing.',
     },
     {
       question: 'What taxes apply to foreign apartment investors?',
-      answer: 'Rental income is taxed at 30% (or 34% above €30,000). Capital gains from selling are taxed similarly. There\'s also an annual real estate tax (kiinteistövero) of typically 0.5-1.0% of the tax value. Tax treaties may affect your overall tax burden depending on your country of residence.',
+      answer: 'Rental income is taxed at 30% (or 34% above €30,000). Capital gains from selling are taxed similarly. Tax treaties may affect your overall tax burden depending on your country of residence.',
     },
     {
       question: 'Can I get a mortgage from a Finnish bank as a foreigner?',
