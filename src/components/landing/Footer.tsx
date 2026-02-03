@@ -1,22 +1,25 @@
-import { useLanguage } from '@/contexts/LanguageContext';
+import { Link } from 'react-router-dom';
 
-const Footer = () => {
+interface FooterProps {
+  variant?: 'home' | 'international' | 'finnish';
+}
+
+const Footer = ({ variant = 'home' }: FooterProps) => {
   const currentYear = new Date().getFullYear();
-  const { t, language } = useLanguage();
+  const isFinnish = variant === 'finnish';
 
   return (
     <footer id="contact" className="py-20 md:py-28 bg-secondary/30">
       <div className="container mx-auto px-6 lg:px-12">
-        {/* Main Footer Content */}
         <div className="max-w-4xl mx-auto">
           {/* Section Label */}
           <span className="text-sm font-medium tracking-widest uppercase text-muted-foreground mb-4 block text-center">
-            {t('footer.label')}
+            {isFinnish ? 'Yhteystiedot' : 'Contact'}
           </span>
 
           {/* Heading */}
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-foreground mb-10 text-center">
-            {t('footer.headline')}
+            {isFinnish ? 'Ota yhteyttä' : 'Get in Touch'}
           </h2>
 
           {/* Contact Info */}
@@ -71,25 +74,21 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-muted-foreground">
             {/* Copyright */}
             <p>
-              © {currentYear} {t('footer.copyright')}
+              © {currentYear} Aptos Apartments. {isFinnish ? 'Kaikki oikeudet pidätetään.' : 'All rights reserved.'}
             </p>
 
             {/* Logo */}
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
+            <Link
+              to={isFinnish ? '/fi' : '/'}
               className="font-serif text-lg font-medium text-foreground hover:opacity-80 transition-opacity"
             >
-              Aptos Apartments
-            </a>
+              {isFinnish ? 'Aptos Asunnot' : 'Aptos Apartments'}
+            </Link>
 
             {/* Social Links */}
             <div className="flex items-center gap-6">
               <a
-                href={language === 'en' ? 'https://www.instagram.com/aptosapartments/' : '#'}
+                href="https://www.instagram.com/aptosapartments/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors"
@@ -100,7 +99,9 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href={language === 'fi' ? 'https://www.facebook.com/profile.php?id=61587002163655' : 'https://www.facebook.com/profile.php?id=61586925637247'}
+                href={isFinnish 
+                  ? 'https://www.facebook.com/profile.php?id=61587002163655' 
+                  : 'https://www.facebook.com/profile.php?id=61586925637247'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors"
