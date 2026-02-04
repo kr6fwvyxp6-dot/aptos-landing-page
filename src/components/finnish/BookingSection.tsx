@@ -1,23 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-// Declare Cal for TypeScript
-declare global {
-  interface Window {
-    Cal?: {
-      (action: string, ...args: unknown[]): void;
-      ns?: Record<string, (action: string, config: unknown) => void>;
-      loaded?: boolean;
-      q?: unknown[];
-    };
-  }
-}
-
 const FinnishBookingSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const calContainerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [scriptReady, setScriptReady] = useState(false);
-  const initializedRef = useRef(false);
+  const calInitialized = useRef(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -36,85 +22,49 @@ const FinnishBookingSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Load Cal.com embed script
   useEffect(() => {
-    if (window.Cal?.loaded) {
-      setScriptReady(true);
-      return;
-    }
+    if (calInitialized.current) return;
+    calInitialized.current = true;
 
-    const existingScript = document.querySelector('script[src="https://app.cal.eu/embed/embed.js"]');
-    
-    if (existingScript) {
-      const checkLoaded = () => {
-        if (window.Cal?.loaded) {
-          setScriptReady(true);
-        } else {
-          setTimeout(checkLoaded, 100);
-        }
-      };
-      checkLoaded();
-      return;
-    }
-
-    (function (C: Window, A: string, L: string) {
-      const p = function (a: { q: unknown[] }, ar: unknown) { a.q.push(ar); };
+    // Cal.com embed script - exactly as provided
+    (function (C: Window & { Cal?: any }, A: string, L: string) {
+      const p = function (a: any, ar: any) { a.q.push(ar); };
       const d = C.document;
       C.Cal = C.Cal || function () {
-        const cal = C.Cal!;
+        const cal = C.Cal;
         const ar = arguments;
         if (!cal.loaded) {
           cal.ns = {};
           cal.q = cal.q || [];
-          const script = d.head.appendChild(d.createElement("script"));
-          script.src = A;
-          script.onload = () => {
-            setScriptReady(true);
-          };
+          d.head.appendChild(d.createElement("script")).src = A;
           cal.loaded = true;
         }
         if (ar[0] === L) {
-          const api = function () { p(api as unknown as { q: unknown[] }, arguments); } as unknown as { q: unknown[]; (action: string, config: unknown): void };
-          const namespace = ar[1] as string;
+          const api: any = function () { p(api, arguments); };
+          const namespace = ar[1];
           api.q = api.q || [];
           if (typeof namespace === "string") {
-            cal.ns![namespace] = cal.ns![namespace] || api;
-            p(cal.ns![namespace] as unknown as { q: unknown[] }, ar);
-            p(cal as unknown as { q: unknown[] }, ["initNamespace", namespace]);
+            cal.ns[namespace] = cal.ns[namespace] || api;
+            p(cal.ns[namespace], ar);
+            p(cal, ["initNamespace", namespace]);
           } else {
-            p(cal as unknown as { q: unknown[] }, ar);
+            p(cal, ar);
           }
           return;
         }
-        p(cal as unknown as { q: unknown[] }, ar);
+        p(cal, ar);
       };
-    })(window, "https://app.cal.eu/embed/embed.js", "init");
+    })(window as any, "https://app.cal.eu/embed/embed.js", "init");
 
-    const fallbackTimeout = setTimeout(() => {
-      if (window.Cal?.loaded) {
-        setScriptReady(true);
-      }
-    }, 2000);
-
-    return () => clearTimeout(fallbackTimeout);
-  }, []);
-
-  // Initialize Finnish calendar
-  useEffect(() => {
-    if (!scriptReady || initializedRef.current || !calContainerRef.current) return;
-
-    calContainerRef.current.innerHTML = '';
-    
-    window.Cal?.("init", "ilmainen-asuntosijoitus-sparraus", { origin: "https://app.cal.eu" });
-    window.Cal?.ns?.["ilmainen-asuntosijoitus-sparraus"]?.("inline", {
-      elementOrSelector: calContainerRef.current,
+    const Cal = (window as any).Cal;
+    Cal("init", "ilmainen-asuntosijoitus-sparraus", { origin: "https://app.cal.eu" });
+    Cal.ns["ilmainen-asuntosijoitus-sparraus"]("inline", {
+      elementOrSelector: "#my-cal-inline-ilmainen-asuntosijoitus-sparraus",
       config: { "layout": "month_view", "useSlotsViewOnSmallScreen": "true" },
       calLink: "aptos/ilmainen-asuntosijoitus-sparraus",
     });
-    window.Cal?.ns?.["ilmainen-asuntosijoitus-sparraus"]?.("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
-    
-    initializedRef.current = true;
-  }, [scriptReady]);
+    Cal.ns["ilmainen-asuntosijoitus-sparraus"]("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
+  }, []);
 
   return (
     <section
@@ -135,8 +85,8 @@ const FinnishBookingSection = () => {
 
         <div className="max-w-4xl mx-auto">
           <div 
-            ref={calContainerRef}
-            style={{ width: '100%', height: '700px', overflow: 'auto' }} 
+            id="my-cal-inline-ilmainen-asuntosijoitus-sparraus"
+            style={{ width: '100%', height: '700px', overflow: 'scroll' }} 
             className="bg-background rounded-lg"
           />
         </div>
