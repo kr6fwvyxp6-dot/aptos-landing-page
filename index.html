@@ -23,6 +23,27 @@
   </head>
 
   <body>
+    <!-- SPA redirect handler for GitHub Pages -->
+    <script>
+      (function() {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        } else {
+          // Handle ?p= parameter from 404.html redirect
+          var q = window.location.search;
+          if (q && q.indexOf('?p=') === 0) {
+            var decoded = q.slice(3).split('&q=');
+            var path = decoded[0].replace(/~and~/g, '&');
+            var query = decoded[1] ? ('?' + decoded[1].replace(/~and~/g, '&')) : '';
+            history.replaceState(null, null, 
+              window.location.pathname.split('/').slice(0, 2).join('/') + '/' + path + query + window.location.hash
+            );
+          }
+        }
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
