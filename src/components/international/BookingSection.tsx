@@ -83,7 +83,7 @@ const BookingSection = () => {
           </h2>
 
           <p className="text-lg text-muted-foreground leading-relaxed mb-4 max-w-2xl mx-auto">
-            A 30-minute call to discuss your situation and goals. You'll walk away with either a first-step roadmap—or confirmation that Finnish apartment investing may not be the right fit for you.
+            A 30-minute call to discuss your situation, goals and constraints. You'll walk away with either a first-step roadmap, or confirmation that Finnish apartment investing may not be the right fit for you at this stage.
           </p>
 
           <p className="text-sm text-muted-foreground mb-12 max-w-2xl mx-auto">
