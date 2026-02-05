@@ -9,7 +9,7 @@ import FAQ from '@/components/international/FAQ';
 import { Button } from '@/components/ui/button';
 import { ArrowDown } from 'lucide-react';
 
-const InternationalInvestors = () => {
+const LandingPage = () => {
   const scrollToBooking = () => {
     const bookingSection = document.getElementById('booking');
     if (bookingSection) {
@@ -20,27 +20,29 @@ const InternationalInvestors = () => {
   return (
     <>
       <SEOHead
-        title="International Investors | Apartment Investing in Finland | Aptos"
-        description="Learn how apartment investing works in Finland as a foreigner. Understand asunto-osake, housing companies (taloyhtiö), and get independent guidance for your investment."
-        canonical="https://aptos.fi/international"
+        title="Aptos Apartments | Apartment Investing in Finland"
+        description="Independent apartment investing advisory for international and Finnish investors. Data-driven guidance to help you navigate the Finnish real estate market with confidence."
+        canonical="https://aptos.fi"
         hreflang={[
-          { lang: 'en', href: 'https://aptos.fi/international' },
+          { lang: 'en', href: 'https://aptos.fi' },
           { lang: 'fi', href: 'https://aptos.fi/fi' },
         ]}
         structuredData={{
           "@context": "https://schema.org",
-          "@type": "Service",
-          "name": "Apartment Investment Advisory for International Investors",
-          "provider": {
-            "@type": "Organization",
-            "name": "Aptos Apartments"
-          },
-          "description": "Independent guidance for international investors looking to invest in Finnish apartments. Covers asunto-osake system, housing company analysis, and investment strategy.",
-          "areaServed": "Finland"
+          "@type": "Organization",
+          "name": "Aptos Apartments",
+          "url": "https://aptos.fi",
+          "description": "Independent apartment investing advisory for international and Finnish investors in Finland.",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+358-45-233-6929",
+            "contactType": "customer service",
+            "email": "aptos@aptos.fi"
+          }
         }}
       />
       <div className="min-h-screen bg-background">
-        <Header variant="international" />
+        <Header variant="landing" />
         <main>
           {/* Hero Section */}
           <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
@@ -56,17 +58,24 @@ const InternationalInvestors = () => {
                 </span>
                 
                 <h1 
-                  className="font-serif text-3xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-tight text-foreground mb-6 opacity-0 animate-fade-in"
+                  className="font-serif text-4xl md:text-5xl lg:text-6xl font-medium leading-tight tracking-tight text-foreground mb-6 opacity-0 animate-fade-in"
                   style={{ animationDelay: '0.2s' }}
                 >
-                  Investing in Finnish Apartments as a Foreigner
+                  Apartment Investing in Finland
                 </h1>
 
                 <p 
-                  className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed mb-8 opacity-0 animate-fade-in"
+                  className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed mb-4 opacity-0 animate-fade-in"
                   style={{ animationDelay: '0.4s' }}
                 >
-                  Finland's apartment market works differently from most countries. We help international investors understand the system, evaluate opportunities, and make informed decisions—without the sales pressure.
+                  Independent, data-driven guidance to help you navigate the Finnish apartment market with clarity and confidence.
+                </p>
+
+                <p 
+                  className="text-sm text-muted-foreground mb-8 opacity-0 animate-fade-in"
+                  style={{ animationDelay: '0.5s' }}
+                >
+                  Years of experience • Non-sales approach • Honest advice
                 </p>
 
                 <div 
@@ -92,10 +101,10 @@ const InternationalInvestors = () => {
           <BookingSection />
           <FAQ />
         </main>
-        <Footer variant="international" />
+        <Footer variant="landing" />
       </div>
     </>
   );
 };
 
-export default InternationalInvestors;
+export default LandingPage;

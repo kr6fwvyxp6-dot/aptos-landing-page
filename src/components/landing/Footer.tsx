@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 
 interface FooterProps {
-  variant?: 'home' | 'international' | 'finnish';
+  variant?: 'landing' | 'finnish';
 }
 
-const Footer = ({ variant = 'home' }: FooterProps) => {
+const Footer = ({ variant = 'landing' }: FooterProps) => {
   const currentYear = new Date().getFullYear();
   const isFinnish = variant === 'finnish';
 
