@@ -39,7 +39,7 @@ const HowItWorks = () => {
             </h2>
 
             <p className="text-lg text-muted-foreground leading-relaxed mb-10">
-              Finland's apartment ownership structure is unique. Understanding it is essential before making any investment decisions.
+              Finland’s apartment ownership structure is unique and often misunderstood. Understanding it is essential before making any investment decisions.
             </p>
 
             <div className="space-y-8">
@@ -52,7 +52,7 @@ const HowItWorks = () => {
                   Apartments as Shares (Asunto-osake)
                 </h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  In Finland, you don't own an apartment directly—you own shares in a housing company that grant you the right to occupy a specific unit. This is called <em>asunto-osake</em>. The distinction matters for taxation, financing, and liability.
+                  In Finland, you don't own an apartment directly—you own shares in a housing company that grant you the right to occupy a specific unit. This is called <em>asunto-osake</em>. The distinction matters for taxation, financing, liability, and how risk is distributed.
                 </p>
               </div>
 
@@ -92,7 +92,7 @@ const HowItWorks = () => {
                 </h3>
                 <ul className="text-muted-foreground leading-relaxed space-y-2">
                   <li>• The listed price is only part of the cost—housing company loans add hidden liability</li>
-                  <li>• Monthly charges (vastike) aren't just maintenance—they often include loan payments</li>
+                  <li>• Monthly charges (vastike) aren’t just maintenance, they often include loan repayments and financing costs</li>
                   <li>• Upcoming renovations (like pipe replacements) can cost tens of thousands of euros</li>
                   <li>• Liquidity varies significantly by location and apartment type</li>
                 </ul>
