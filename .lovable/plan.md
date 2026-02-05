@@ -1,99 +1,78 @@
 
 
-# Plan: Restructure Site Navigation and Landing Page
+# Fix: Direct URL Navigation to /fi Route
 
-## Summary
-Merge the International Investors content into the root landing page (`/`), remove the separate home page, and simplify navigation by removing the language switcher buttons while adding cross-links between Finnish and English pages.
+## Problem
+When visiting `aptos.fi/fi` directly, the page stays white due to incorrect redirect handling. The 404.html and index.html scripts were configured for a GitHub Pages subdirectory deployment (like `username.github.io/aptos-landing-page/`) instead of a root domain (`aptos.fi`).
 
----
+## Root Cause
+- `pathSegmentsToKeep = 1` in 404.html assumes a subdirectory structure
+- Path reconstruction in index.html adds extra path segments
 
-## Changes Overview
-
-### 1. Make International Investors the Landing Page
-
-**Current state:**
-- `/` shows a "gateway" Home page with two buttons
-- `/international` shows the full International Investors content
-
-**New state:**
-- `/` shows the International Investors content directly (with enhanced hero)
-- `/international` route removed (or redirects to `/`)
-
-**Files to modify:**
-- `src/App.tsx` - Update routing
-- `src/pages/InternationalInvestors.tsx` - Rename/repurpose as new landing page
-- `src/pages/Home.tsx` - Delete (no longer needed)
-
-**Hero section updates for the new landing page:**
-- Add the prominent H1: "Apartment Investing in Finland"
-- Add subheadline: "Independent, data-driven guidance to help you navigate the Finnish apartment market with clarity and confidence."
-- Add credibility line: "Years of experience • Non-sales approach • Honest advice"
-- Keep the existing "Book a Free Sparring Session" CTA button
+## Solution
+Update both redirect scripts to work with a root domain deployment.
 
 ---
 
-### 2. Update Header Navigation
+## File Changes
 
-**International/Landing page header:**
-- Keep: How It Works, Our Approach, FAQ, Book
-- Add: "Suomalaisille" link (navigates to `/fi`)
-- Remove: Language switcher (FI/EN buttons)
+### 1. Update `public/404.html`
 
-**Finnish page header:**
-- Keep: "Varaa aika" button
-- Add: "In English" link (navigates to `/`)
-- Remove: Language switcher (FI/EN buttons)
+Change `pathSegmentsToKeep` from `1` to `0` and simplify the redirect logic:
 
-**File to modify:**
-- `src/components/landing/Header.tsx`
+```javascript
+var pathSegmentsToKeep = 0; // Root domain (aptos.fi)
+var l = window.location;
+l.replace(
+  l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+  '/?p=' +
+  l.pathname.slice(1).replace(/&/g, '~and~') +
+  (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+  l.hash
+);
+```
+
+### 2. Update `index.html`
+
+Fix the path reconstruction to work with root domain:
+
+```javascript
+(function() {
+  var redirect = sessionStorage.redirect;
+  delete sessionStorage.redirect;
+  if (redirect && redirect !== location.href) {
+    history.replaceState(null, null, redirect);
+  } else {
+    var q = window.location.search;
+    if (q && q.indexOf('?p=') === 0) {
+      var decoded = q.slice(3).split('&q=');
+      var path = decoded[0].replace(/~and~/g, '&');
+      var query = decoded[1] ? ('?' + decoded[1].replace(/~and~/g, '&')) : '';
+      history.replaceState(null, null, 
+        '/' + path + query + window.location.hash
+      );
+    }
+  }
+})();
+```
 
 ---
 
-### 3. Update SEO Metadata
+## How It Will Work After Fix
 
-**Landing page (`/`):**
-- Update canonical URL from `/international` to `https://aptos.fi`
-- Update hreflang to point `/` as English version
-- Keep Organization + Service structured data
-
-**Finnish page (`/fi`):**
-- Update hreflang to point to `/` instead of `/international`
-
-**Files to modify:**
-- `src/pages/InternationalInvestors.tsx` (or new landing component)
-- `src/pages/FinnishInvestors.tsx`
+1. User visits `aptos.fi/fi`
+2. Server returns 404.html (no physical `/fi` file exists)
+3. 404.html redirects to `aptos.fi/?p=fi`
+4. index.html loads, script detects `?p=fi`
+5. `history.replaceState` changes URL to `aptos.fi/fi`
+6. React Router sees `/fi` and renders FinnishInvestors page
 
 ---
 
-## File Changes Summary
+## Files to Modify
 
-| File | Action |
+| File | Change |
 |------|--------|
-| `src/App.tsx` | Remove `/international` route, keep `/` and `/fi` |
-| `src/pages/Home.tsx` | Delete |
-| `src/pages/InternationalInvestors.tsx` | Enhance hero, update SEO, use as landing page |
-| `src/pages/FinnishInvestors.tsx` | Update hreflang reference |
-| `src/components/landing/Header.tsx` | Remove language switcher, add cross-links |
-
----
-
-## Visual Mockup of Header Changes
-
-**Landing page (English) header:**
-```text
-[Aptos Apartments]     How It Works | Our Approach | FAQ | Suomalaisille | Book
-```
-
-**Finnish page header:**
-```text
-[Aptos Asunnot]        In English | Varaa aika
-```
-
----
-
-## Technical Notes
-
-- The `variant` prop in Header will be simplified since there's no longer a "home" variant needed
-- Footer may also need minor updates to remove language switcher if present
-- The 404.html redirect script will continue to work since we're keeping the same SPA routing approach
+| `public/404.html` | Set `pathSegmentsToKeep = 0`, simplify path encoding |
+| `index.html` | Fix path reconstruction for root domain |
 
