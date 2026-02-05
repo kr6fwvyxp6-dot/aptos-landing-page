@@ -12,7 +12,7 @@ const FinnishInvestors = () => {
         canonical="https://aptos.fi/fi"
         hreflang={[
           { lang: 'fi', href: 'https://aptos.fi/fi' },
-          { lang: 'en', href: 'https://aptos.fi/international' },
+          { lang: 'en', href: 'https://aptos.fi' },
         ]}
         structuredData={{
           "@context": "https://schema.org",

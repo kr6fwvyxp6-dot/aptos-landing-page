@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 interface HeaderProps {
-  variant?: 'home' | 'international' | 'finnish';
+  variant?: 'landing' | 'finnish';
 }
 
-const Header = ({ variant = 'home' }: HeaderProps) => {
+const Header = ({ variant = 'landing' }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,27 +51,7 @@ const Header = ({ variant = 'home' }: HeaderProps) => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6 lg:gap-10">
           <ul className="flex items-center gap-6 lg:gap-10">
-            {variant === 'home' && (
-              <>
-                <li>
-                  <Link
-                    to="/international"
-                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
-                  >
-                    International Investors
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/fi"
-                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
-                  >
-                    Suomalaisille
-                  </Link>
-                </li>
-              </>
-            )}
-            {variant === 'international' && (
+            {variant === 'landing' && (
               <>
                 <li>
                   <button
@@ -99,6 +78,14 @@ const Header = ({ variant = 'home' }: HeaderProps) => {
                   </button>
                 </li>
                 <li>
+                  <Link
+                    to="/fi"
+                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
+                  >
+                    Suomalaisille
+                  </Link>
+                </li>
+                <li>
                   <button
                     onClick={() => scrollToSection('booking')}
                     className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
@@ -109,41 +96,26 @@ const Header = ({ variant = 'home' }: HeaderProps) => {
               </>
             )}
             {variant === 'finnish' && (
-              <li>
-                <button
-                  onClick={() => scrollToSection('booking')}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
-                >
-                  Varaa aika
-                </button>
-              </li>
+              <>
+                <li>
+                  <Link
+                    to="/"
+                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
+                  >
+                    In English
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection('booking')}
+                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors link-underline pb-1"
+                  >
+                    Varaa aika
+                  </button>
+                </li>
+              </>
             )}
           </ul>
-
-          {/* Language Switcher */}
-          <div className="flex items-center gap-1 ml-4 border-l border-border pl-4">
-            <Link
-              to="/fi"
-              className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
-                variant === 'finnish'
-                  ? 'text-foreground bg-secondary'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              FI
-            </Link>
-            <span className="text-muted-foreground/50">/</span>
-            <Link
-              to={variant === 'home' ? '/' : '/international'}
-              className={`text-sm font-medium transition-colors px-2 py-1 rounded ${
-                variant !== 'finnish'
-                  ? 'text-foreground bg-secondary'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              EN
-            </Link>
-          </div>
         </div>
 
         {/* Mobile Menu Button */}
@@ -159,31 +131,9 @@ const Header = ({ variant = 'home' }: HeaderProps) => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-background border-t border-border">
-          <div className="container mx-auto px-6 py-6 flex flex-col gap-6">
+          <div className="container mx-auto px-6 py-6 flex flex-col gap-4">
             <ul className="flex flex-col gap-4">
-              {variant === 'home' && (
-                <>
-                  <li>
-                    <Link
-                      to="/international"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-base font-medium text-foreground hover:text-muted-foreground transition-colors"
-                    >
-                      International Investors
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/fi"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-base font-medium text-foreground hover:text-muted-foreground transition-colors"
-                    >
-                      Suomalaisille sijoittajille
-                    </Link>
-                  </li>
-                </>
-              )}
-              {variant === 'international' && (
+              {variant === 'landing' && (
                 <>
                   <li>
                     <button
@@ -210,6 +160,15 @@ const Header = ({ variant = 'home' }: HeaderProps) => {
                     </button>
                   </li>
                   <li>
+                    <Link
+                      to="/fi"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-base font-medium text-foreground hover:text-muted-foreground transition-colors"
+                    >
+                      Suomalaisille
+                    </Link>
+                  </li>
+                  <li>
                     <button
                       onClick={() => scrollToSection('booking')}
                       className="text-base font-medium text-foreground hover:text-muted-foreground transition-colors"
@@ -220,43 +179,27 @@ const Header = ({ variant = 'home' }: HeaderProps) => {
                 </>
               )}
               {variant === 'finnish' && (
-                <li>
-                  <button
-                    onClick={() => scrollToSection('booking')}
-                    className="text-base font-medium text-foreground hover:text-muted-foreground transition-colors"
-                  >
-                    Varaa aika
-                  </button>
-                </li>
+                <>
+                  <li>
+                    <Link
+                      to="/"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-base font-medium text-foreground hover:text-muted-foreground transition-colors"
+                    >
+                      In English
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => scrollToSection('booking')}
+                      className="text-base font-medium text-foreground hover:text-muted-foreground transition-colors"
+                    >
+                      Varaa aika
+                    </button>
+                  </li>
+                </>
               )}
             </ul>
-
-            {/* Mobile Language Switcher */}
-            <div className="flex items-center gap-2 pt-4 border-t border-border">
-              <span className="text-sm text-muted-foreground mr-2">Language:</span>
-              <Link
-                to="/fi"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-sm font-medium transition-colors px-3 py-2 rounded ${
-                  variant === 'finnish'
-                    ? 'text-foreground bg-secondary'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Suomi
-              </Link>
-              <Link
-                to={variant === 'home' ? '/' : '/international'}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-sm font-medium transition-colors px-3 py-2 rounded ${
-                  variant !== 'finnish'
-                    ? 'text-foreground bg-secondary'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                English
-              </Link>
-            </div>
           </div>
         </div>
       )}
