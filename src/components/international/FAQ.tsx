@@ -30,7 +30,7 @@ const FAQ = () => {
   const faqs = [
     {
       question: 'Can foreigners buy apartments in Finland?',
-      answer: 'Yes. There are no restrictions on foreigners buying residential property in Finland. Non-EU citizens purchasing property near border areas may need to notify authorities, but this rarely affects typical apartment investments in cities.',
+      answer: 'Yes. Foreigners can freely buy apartments (shares in housing companies) in Finland. For detached houses or land, non-EU/EEA buyers may need a permit in certain cases, but this rarely affects typical city apartment investments.',
     },
     {
       question: 'Do I need to live in Finland to invest in Finnish apartments?',
@@ -42,7 +42,7 @@ const FAQ = () => {
     },
     {
       question: 'How does the buying process work for non-residents?',
-      answer: 'The process involves: (1) Finding a property and making an offer, (2) Signing a preliminary agreement with a deposit, (3) Arranging financing if needed (Finnish banks are cautious with non-residents), (4) Signing the final deed of sale, (5) Registering with the housing company\'s shareholder list. The process typically takes 1-3 months. Having a Finnish bank account simplifies transactions.',
+      answer: 'The process involves: (1) Finding a property and making an offer, (2) Signing a preliminary agreement with a deposit, (3) Arranging financing if needed (Finnish banks are cautious with non-residents), (4) Signing the final deed of sale, (5) Registering with the housing company\'s shareholder list. The process typically takes 1–3 months, depending on financing, seller readiness, and banking arrangements. Having a Finnish bank account simplifies transactions.',
     },
     {
       question: 'What is a putkiremontti and why does it matter?',
@@ -54,11 +54,11 @@ const FAQ = () => {
     },
     {
       question: 'What taxes apply to foreign apartment investors?',
-      answer: 'Rental income is taxed at 30% (or 34% above €30,000). Capital gains from selling are taxed similarly. Tax treaties may affect your overall tax burden depending on your country of residence.',
+      answer: 'Rental income is taxed at 30% (or 34% above €30,000). Capital gains from selling are taxed similarly. Most investment-related expenses (such as maintenance charges, interest, and management costs) are deductible, which materially affects net taxation.',
     },
     {
       question: 'Can I get a mortgage from a Finnish bank as a foreigner?',
-      answer: 'It\'s possible but challenging. Finnish banks typically require substantial down payments (often 50% or more for non-residents), proof of stable income, and sometimes existing assets in Finland. EU citizens may find it easier than non-EU residents. Many international investors purchase with cash or arrange financing in their home country.',
+      answer: 'It\'s possible but challenging. Finnish banks typically require substantial down payments (often 50% or more for non-residents), proof of stable income, and sometimes existing assets in Finland. EU citizens may find it easier than non-EU residents. Many international investors purchase with cash or arrange financing in their home country. In practice, financing availability often determines whether an investment is feasible for non-residents.',
     },
   ];
 
