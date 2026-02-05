@@ -60,6 +60,10 @@ const FAQ = () => {
       question: 'Can I get a mortgage from a Finnish bank as a foreigner?',
       answer: 'It\'s possible but challenging. Finnish banks typically require substantial down payments (often 50% or more for non-residents), proof of stable income, and sometimes existing assets in Finland. EU citizens may find it easier than non-EU residents. Many international investors purchase with cash or arrange financing in their home country. In practice, financing availability often determines whether an investment is feasible for non-residents.',
     },
+    {
+      question: 'Does buying an apartment give me residency or tax residency in Finland?',
+      answer: 'No. Buying an apartment in Finland does not grant residency or tax residency. Immigration status and tax residency are determined separately based on residence permits and physical presence.',
+    },
   ];
 
   // Generate FAQ structured data
