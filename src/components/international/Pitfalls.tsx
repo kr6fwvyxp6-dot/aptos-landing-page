@@ -24,7 +24,7 @@ const Pitfalls = () => {
   const pitfalls = [
     {
       title: 'Misunderstanding Housing Company Loans',
-      description: 'Many buyers focus on the listed apartment price while overlooking the housing company debt attached to their shares. This debt can add 30-50% to your actual investment—and you\'re liable for paying it off through monthly charges.',
+      description: 'Many buyers focus on the listed apartment price while overlooking the housing company debt attached to their shares. This debt can materially increase your actual investment, sometimes by tens of percent, and you’re liable for paying it off through monthly charges.',
     },
     {
       title: 'Overestimating Liquidity',
@@ -32,7 +32,7 @@ const Pitfalls = () => {
     },
     {
       title: 'Underestimating Management Realities',
-      description: 'Managing a Finnish rental property from abroad requires understanding local tenant rights, language barriers with housing companies, and practical matters like key handovers and maintenance coordination.',
+      description: 'Managing a Finnish rental property from abroad requires understanding local tenant rights, language barriers with housing companies, and practical matters like key handovers and maintenance coordination. These frictions are manageable, but rarely obvious before ownership.',
     },
   ];
 
