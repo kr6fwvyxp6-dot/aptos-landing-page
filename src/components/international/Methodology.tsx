@@ -35,7 +35,7 @@ const Methodology = () => {
     {
       number: '03',
       title: 'Cash Flow & Downside Scenarios',
-      description: 'We model realistic rental income against all costs—including vacancy, maintenance charges, loan payments, and taxes. We stress-test against interest rate changes and unexpected expenses.',
+      description: 'We model realistic rental income against all costs—including vacancy, maintenance charges, loan payments, and taxes. We stress-test against interest rate changes, vacancy, and unexpected expenses.',
     },
     {
       number: '04',
@@ -62,7 +62,7 @@ const Methodology = () => {
             </h2>
 
             <p className="text-lg text-muted-foreground leading-relaxed mb-12">
-              Our methodology is built on experience with the Finnish market—not generic real estate advice. Here's how we analyze potential investments:
+              Our methodology is built on hands-on experience with the Finnish market, not generic real estate advice. Here's how we analyze potential investments:
             </p>
 
             <div className="space-y-8">
