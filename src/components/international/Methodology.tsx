@@ -24,23 +24,23 @@ const Methodology = () => {
   const steps = [
     {
       number: '01',
-      title: 'Market & Location Reality Check',
-      description: 'We assess whether your target city or area makes sense for your goals. Not every Finnish city is suitable for investment, and local dynamics matter more than national averages.',
+      title: 'Understanding the Finnish Apartment System',
+      description: 'Most mistakes happen before an apartment is even considered. We help you understand how apartment ownership, housing companies (taloyhtiö), shared debt, maintenance charges, and renovations really work in Finland, and how these differ from property investing in other countries.',
     },
     {
       number: '02',
-      title: 'Housing Company Analysis',
-      description: 'We examine the taloyhtiö\'s financial statements, debt structure, upcoming renovations (like putkiremontti), and management quality. This is where many investments go wrong.',
+      title: 'Matching Strategy, Location, and Reality',
+      description: 'Once the system is clear, we look at your goals and constraints and match them against real market conditions. Not every Finnish city, neighborhood, or apartment type works as an investment, and national averages often hide local risks.',
     },
     {
       number: '03',
-      title: 'Cash Flow & Downside Scenarios',
-      description: 'We model realistic rental income against all costs—including vacancy, maintenance charges, loan payments, and taxes. We stress-test against interest rate changes, vacancy, and unexpected expenses.',
+      title: 'Identifying and Evaluating Actual Apartments',
+      description: 'We then focus on concrete opportunities. This can mean apartments from our own inventory, properties available through our local network, or listings you’ve found on the public market. We analyse these cases in detail, including housing company finances, debt, renovations, cash flow, and downside scenarios, to determine whether they make sense as investments.',
     },
     {
       number: '04',
-      title: 'Liquidity & Exit Considerations',
-      description: 'We evaluate how easily you could sell the property if needed. Some apartments in certain areas can take months or years to sell—this affects your risk profile significantly.',
+      title: 'Risk, Liquidity, and Exit Awareness',
+      description: 'Finally, we look beyond the purchase. We assess rental demand, liquidity, and exit scenarios, because some apartments are easy to sell while others can take months or years. Understanding this upfront is essential for managing risk, especially for investors operating from abroad.',
     },
   ];
 
@@ -58,11 +58,11 @@ const Methodology = () => {
             </span>
 
             <h2 className="font-serif text-3xl md:text-4xl font-medium leading-tight text-foreground mb-6">
-              How We Evaluate Finnish Apartment Investments
+              How We Help International Investors Invest in Finnish Apartments
             </h2>
 
             <p className="text-lg text-muted-foreground leading-relaxed mb-12">
-              Our methodology is built on hands-on experience with the Finnish market, not generic real estate advice. Here's how we analyze potential investments:
+              We work with international investors who want to understand how apartment investing in Finland actually works, before committing capital. Our approach combines guidance, local market insight, and access to real opportunities, so decisions are made with clarity rather than assumptions.
             </p>
 
             <div className="space-y-8">
