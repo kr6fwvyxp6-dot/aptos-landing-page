@@ -68,14 +68,14 @@ const LandingPage = () => {
                   className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed mb-4 opacity-0 animate-fade-in"
                   style={{ animationDelay: '0.4s' }}
                 >
-                  Independent, data-driven guidance to help you navigate the Finnish apartment market with clarity and confidence.
+                  Clear, experience-based guidance to help you understand and invest in Finnish apartments with confidence.
                 </p>
 
                 <p 
                   className="text-sm text-muted-foreground mb-8 opacity-0 animate-fade-in"
                   style={{ animationDelay: '0.5s' }}
                 >
-                  Years of experience • Non-sales approach • Honest advice
+                  Hands-on experience • Data-informed decisions • Market insight
                 </p>
 
                 <div 
